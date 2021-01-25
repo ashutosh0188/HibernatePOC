@@ -1,14 +1,13 @@
 package poc.orm.HibernatePOC.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Book {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
+    @TableGenerator(name = "tab", initialValue = 3, allocationSize = 1) //startPrimaryKey = i.e. 4 (3+1)
     private Long id;
     private String name;
 
