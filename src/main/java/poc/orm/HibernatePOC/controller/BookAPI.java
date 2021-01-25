@@ -2,9 +2,7 @@ package poc.orm.HibernatePOC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import poc.orm.HibernatePOC.entity.Book;
 import poc.orm.HibernatePOC.response.BookResponse;
 import poc.orm.HibernatePOC.service.BookService;
@@ -24,7 +22,25 @@ public class BookAPI {
     }
 
     @GetMapping("/books/{bookId}")
-    public ResponseEntity<Book> getBook(@PathVariable("bookId") Long bookId) {
-        return ResponseEntity.ok(bookService.getBookById(bookId));
+    public ResponseEntity getBook(@PathVariable("bookId") Long bookId) {
+        Book book = bookService.getBookById(bookId);
+        ResponseEntity res = book!=null ? ResponseEntity.accepted().body(book) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/books")
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        return ResponseEntity.ok(bookService.addBook(book));
+    }
+
+    @PutMapping("/books")
+    public ResponseEntity<Book> updateBook(@RequestBody Book book) {
+        return ResponseEntity.ok(this.bookService.updateBook(book));
+    }
+
+    @DeleteMapping("/books/{bookId}")
+    public ResponseEntity deleteBook(@PathVariable("bookId") Long bookId) {
+        ResponseEntity res = this.bookService.deleteBookById(bookId)!=null ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(res);
     }
 }
